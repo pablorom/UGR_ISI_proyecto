@@ -16,7 +16,7 @@ class WebScrapping:
     def __init__(self, ingred):
         self.ingrediente = ingred
         self.listaReceta = []
-        # self.ingrediente = ingrediente.replace("algo","+")
+        # self.ingrediente = ingrediente.replace(" ","+")
         
         
     # Metodo que realice el WebScrapping de "Recetas Gratis"    
@@ -77,7 +77,3 @@ class WebScrapping:
             
             
     
-ws = WebScrapping("pollo")
-ws.buscar_recetasGratis()
-ws.buscar_nosolodulces()
-ws.mostrar_receta()

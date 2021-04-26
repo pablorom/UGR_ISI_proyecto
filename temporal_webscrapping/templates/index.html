@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="author" content="Grupo ISI"/>
+    <meta name="viewport" content="width=device-width"/>   <!-- Para diseño adaptable -->
+    <!-- Para que Flask lea los estilos css desde la carpeta static-->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}" /> 
+    <title>Recetas a la carta</title>
+</head>
+
+<body>
+    <header>
+        <div id="nav-left">
+            <h1>RECETAS</h1>
+            <p>A LA CARTA</p>
+        </div>
+        
+        <div id="nav-center">
+            <form action="{{url_for('procesar')}}" method="get" class="busqueda-ingrediente">
+                <input name="ingrediente" type="search" id="busca-ingrediente" placeholder="Buscar..."/>
+                <input type="submit" value="Enviar"/>
+            </from>
+        </div>
+    </header>
+    <main>
+        <h1>Esto es un main</h1>
+    </main>
+</body>
+</html>
