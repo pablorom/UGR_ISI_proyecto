@@ -16,12 +16,15 @@ class WebScrapping:
     def __init__(self, ingred):
         self.ingrediente = ingred
         self.listaReceta = []
-        # self.ingrediente = ingrediente.replace(" ","+")
-        
+        # Si el usuario introduce los ingredientes separados con comas, las eliminamos
+        self.ingrediente = self.ingrediente.replace(",","")
+
         
     # Metodo que realice el WebScrapping de "Recetas Gratis"    
     def buscar_recetasGratis(self):
         url = 'https://www.recetasgratis.net/busqueda?q='
+        # ¡NOTA! Sirve tanto con uno como con más de un ingrediente
+        # ya que varios ingredientes se reciben de la forma ingrediente=ing1+ing2
         url_completa = url + self.ingrediente
         html_text = requests.get(url_completa).text
         soup = BeautifulSoup(html_text, 'lxml')
@@ -63,9 +66,7 @@ class WebScrapping:
             receta = MisRecetas.MisRecetas(titulo, imagen)
             self.listaReceta.append(receta)
          
-         
-        
-        
+             
     # Método que muestra los resultados (para comprobar que funciona bien)
     def mostrar_receta(self):
         for lr in self.listaReceta:
