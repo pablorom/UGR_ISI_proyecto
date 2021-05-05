@@ -39,19 +39,20 @@ class WebScrapping:
             # elementos de tipo MisRecetas.
             # Es necesario escribir "MisRecetas.MisRecetas" para llamar a la clase
             # MisRecetas que está dentro del módulo con el mismo nombre
-            receta = MisRecetas.MisRecetas(titulo, imagen)
+            receta = MisRecetas.MisRecetas(titulo, imagen, "RECETAS GRATIS")
             self.listaReceta.append(receta)
+        
             
     
     # Metodo que realice el WebScrapping de "No Solo Dulces"
     def buscar_nosolodulces(self):
-         url = 'https://nosolodulces.es/?s='
-         url_completa = url + self.ingrediente
-         html_text = requests.get(url_completa).text
-         soup = BeautifulSoup(html_text, 'lxml')
-         elementos = soup.find_all('article', class_ = 'col-md-4 receta-categoria')
-         
-         for elem in elementos:
+        url = 'https://nosolodulces.es/?s='
+        url_completa = url + self.ingrediente
+        html_text = requests.get(url_completa).text
+        soup = BeautifulSoup(html_text, 'lxml')
+        elementos = soup.find_all('article', class_ = 'col-md-4 receta-categoria')
+        
+        for elem in elementos:
             # Obtenemos los parámetros deseados
             # Como el tag <a href...> donde se aloja el titulo no tiene ningún atributo 'class'
             # no se puede hacer la búsqueda por la clase, de forma que buscamos todos los <a href>
@@ -63,8 +64,10 @@ class WebScrapping:
             # elementos de tipo MisRecetas.
             # Es necesario escribir "MisRecetas.MisRecetas" para llamar a la clase
             # MisRecetas que está dentro del módulo con el mismo nombre
-            receta = MisRecetas.MisRecetas(titulo, imagen)
+            receta = MisRecetas.MisRecetas(titulo, imagen, "NO SOLO DULCES")
             self.listaReceta.append(receta)
+
+        return self.listaReceta
          
              
     # Método que muestra los resultados (para comprobar que funciona bien)

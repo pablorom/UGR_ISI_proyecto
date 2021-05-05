@@ -6,7 +6,7 @@
 """
 
 from flask import Flask, render_template, request
-import WebScrapping
+import Busqueda
 
 app = Flask(__name__)
 
@@ -19,10 +19,9 @@ def index():
 @app.route("/procesar", methods=['GET'])
 def procesar():
     ingrediente = request.args.get("ingrediente")  # request del parametro ingrediente del formulario
-    ws = WebScrapping.WebScrapping(ingrediente)  # Se realiza el web scrapping del ingrediente
-    ws.buscar_recetasGratis()
-    ws.buscar_nosolodulces()
-    ws.mostrar_receta()
+    busq = Busqueda.Busqueda(ingrediente);
+    busq.buscar();
+    busq.mostrar_receta();
     return render_template("mostrar.html", ingrediente=ingrediente) # Se carega un html nuevo (mostrar.html) tras la peticion
 
 # No borrar este metodo (por ahora) ... esto deberia cambiarse por el servidor cloud
