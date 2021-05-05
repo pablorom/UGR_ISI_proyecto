@@ -20,9 +20,9 @@ def index():
 def procesar():
     ingrediente = request.args.get("ingrediente")  # request del parametro ingrediente del formulario
     busq = Busqueda.Busqueda(ingrediente);
-    busq.buscar();
-    busq.mostrar_receta();
-    return render_template("mostrar.html", ingrediente=ingrediente) # Se carega un html nuevo (mostrar.html) tras la peticion
+    listaReceta = busq.buscar();
+    #busq.mostrar_receta();
+    return render_template("mostrar.html", recetas=listaReceta) # Se carega un html nuevo (mostrar.html) tras la peticion
 
 # No borrar este metodo (por ahora) ... esto deberia cambiarse por el servidor cloud
 if __name__ == "__main__":

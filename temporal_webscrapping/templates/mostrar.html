@@ -24,7 +24,17 @@
         </div>
     </header>
     <main>
-        <h1>Ingrediente: {{ingrediente}}</h1>
+        <h1>Mostramos las recetas:</h1>
+        <ul> 
+        {% for recet in recetas %} 
+            <li>{{ recet.titulo }}</a>
+                <ul>
+                    <li>{{ recet.urlImagen }}</a>
+                    <li>{{ recet.paginaOriginal }}</a>
+                </ul>
+            </li> 
+        {% endfor %} 
+        </ul> 
     </main>
 </body>
 </html>

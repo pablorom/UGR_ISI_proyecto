@@ -23,11 +23,15 @@ class Busqueda:
         # self.listaReceta contiene los ingredientes de ambas paginas
         self.listaReceta = ws.buscar_nosolodulces()
 
+        return self.listaReceta
+
     # Aqui falta el método que realiza la búsqueda con la API 
 
     def buscar(self):
-        self.busqueda_scrapping()
+        self.listaReceta = self.busqueda_scrapping()
         # Aqui se llamaria al método que hace una busqueda conn la API
+
+        return self.listaReceta
 
     # Método que muestra los resultados (para comprobar que funciona bien)
     def mostrar_receta(self):
