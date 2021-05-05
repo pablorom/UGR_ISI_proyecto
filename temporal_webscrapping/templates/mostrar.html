@@ -29,8 +29,8 @@
         {% for recet in recetas %} 
             <li>{{ recet.titulo }}</a>
                 <ul>
-                    <li>{{ recet.urlImagen }}</a>
-                    <li>{{ recet.paginaOriginal }}</a>
+                    <li><img src="{{recet.urlImagen}}" alt="recipe_image"></li>
+                    <li>{{ recet.paginaOriginal }}</li>
                 </ul>
             </li> 
         {% endfor %} 
