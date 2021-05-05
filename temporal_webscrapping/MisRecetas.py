@@ -13,9 +13,10 @@
 class MisRecetas:
     
     # Constructor de la clase Receta
-    def __init__(self,tit,img):
+    def __init__(self,tit,img, orig):
         self.titulo = tit
         self.urlImagen = img
+        self.paginaOriginal = orig
         #yo aniadiria un campo que indique el nombre de la pagina original
         
     # Definimos los get y set de las variables
@@ -30,4 +31,10 @@ class MisRecetas:
     
     def set_urlImagen(self, imagen):
         self.urlImagen = imagen
+
+    def get_paginaOriginal(self):
+        return self.paginaOriginal
+    
+    def set_paginaOriginal(self, orig):
+        self.paginaOriginal = orig
         
