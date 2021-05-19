@@ -13,16 +13,18 @@ app = Flask(__name__)
 # Se carga la pagina principal (index.html)
 @app.route("/")
 def index():
-    return render_template("index.html")
+    ingrediente = "chocolate"  # request del parametro ingrediente del formulario
+    busq = Busqueda.Busqueda(ingrediente)
+    listaReceta = busq.buscar()
+    return render_template("index.html", recetas=listaReceta)
 
 # Procesa el fomulario (de tipo get, para poder ver los ingredientes en la url)
 @app.route("/procesar", methods=['GET'])
 def procesar():
     ingrediente = request.args.get("ingrediente")  # request del parametro ingrediente del formulario
-    busq = Busqueda.Busqueda(ingrediente);
-    listaReceta = busq.buscar();
-    #busq.mostrar_receta();
-    return render_template("mostrar.html", recetas=listaReceta) # Se carega un html nuevo (mostrar.html) tras la peticion
+    busq = Busqueda.Busqueda(ingrediente)
+    listaReceta = busq.buscar()
+    return render_template("index.html", recetas=listaReceta) # Se carega un html nuevo (mostrar.html) tras la peticion
 
 # No borrar este metodo (por ahora) ... esto deberia cambiarse por el servidor cloud
 if __name__ == "__main__":
