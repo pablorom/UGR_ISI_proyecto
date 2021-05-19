@@ -5,26 +5,124 @@
     <meta name="author" content="Grupo ISI"/>
     <meta name="viewport" content="width=device-width"/>   <!-- Para diseño adaptable -->
     <!-- Para que Flask lea los estilos css desde la carpeta static-->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}" /> 
-    <title>Recetas a la carta</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}" /> 
+    <!-- Estilos de letra -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <!-- informacion visible del head -->
+    <link rel="icon" type="imgage/ico" href="{{ url_for('static', filename='img/pancake.ico') }}"/>
+    <title>Recetas a la Carta</title>
 </head>
 
 <body>
+    <nav class="menu">
+        <div class="container">
+            <div id="nav-title">
+                <a class="navbar-index" href="#background-header">Recetas a la Carta</a>
+            </div>
+            <div id="nav-options">
+                <ul id="bs-options-navbar">
+                    <li><a href="#background-header">Home</a></li>
+                    <li><a href="#categorias">Categorias</a></li>
+                    <li><a href="#about">Sobre nosotros</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <header>
-        <div id="nav-left">
-            <h1>RECETAS</h1>
-            <p>A LA CARTA</p>
-        </div>
-        
-        <div id="nav-center">
-            <form action="{{url_for('procesar')}}" method="get" class="busqueda-ingrediente">
-                <input name="ingrediente" type="search" id="busca-ingrediente" placeholder="Buscar..."/>
-                <input type="submit" value="Enviar"/>
-            </from>
-        </div>
+        <div id="background-header">
+            <div class="overlay">
+                <div class="container">
+                    <div class="intro-text">
+                        <h1>Introduzca los ingredientes...</h1>
+                        <div id="search-box">
+                            <form action="{{url_for('procesar')}}" method="get" class="busqueda-ingrediente">
+                                <input type="text" id="busca-ingrediente" name="ingrediente" placeholder="Buscar..."/>
+                                <button type="submit" id="search-btn"> <i class="fas fa-search"></i> </button>    
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>   
     </header>
     <main>
-        <h1>Esto es un main</h1>
+        <div id="principal-recetas">
+            <div id="recetas">
+                <table class="container-recetas">
+                    {% for recet in recetas|batch(4) %}
+                    <tr class="columns">
+                        {% for rec in recet %}
+                        <td class="column">
+                            <img class="img-recetas" src="{{rec.urlImagen}}" alt="recipe_image"/>
+                            <div class="title-receta-overlay">
+                                <p>{{rec.titulo}}</p>
+                            </div>
+                        </td>
+                        {% endfor %}
+                    </tr>                   
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div id="categorias" class="informacion">
+            <div id="categorias-header">
+                <div class="overlay">
+                    <h2>Categorias</h2>
+                    <hr>
+                    <p>Aqui van las categorias</p>
+                </div>
+            </div>
+            <div id="categorias-info">
+
+            </div>
+        </div>
+        <div id="about" class="informacion">
+            <div id="about-header">
+                <div class="overlay">
+                    <h2>Sobre nosotros</h2>
+                    <hr>
+                </div>
+            </div>
+            <div id="about-info">
+                <div class="container">
+                    <div id="row">
+                        <div id="info-img">
+                            <img src="{{ url_for('static', filename='img/foto_info_nosotros.jpg') }}" id="img-about-us" alt="imagen about us">
+                        </div>
+                        <div id="info-txt">
+                            <h2 class="titulo-aux1">Nuestra página</h2>
+                            <hr class="hr-aux1">
+                            <p>Recetas a la carta es un buscador de recetas enfocado al ámbito de la cocina, no solo para usuarios expertos sino también para usuarios principiantes,
+                            facilitando a nuestros usuarios la información necesaria para elegir qué plato cocinar de una manera rápida, sencilla y aprovechando los
+                            ingredientes disponibles al máximo.</p>
+                            <h3>Nuestro equipo:</h3>
+                            <ul id="equipo">
+                                <li>Alba Casillas Rodríguez</li>
+                                <li>Pablo Robles Molina</li>
+                                <li>Tomás Ruíz Fernández</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
+    <footer>
+        <div id="footer-info">
+            <ul id="footer-options">
+                <li>&copy;&nbsp;2021&nbsp;Recetas a la Carta</li>
+                <li>Universidad de Granada</li>
+                <li> Ing. de Sistemas de Información</li>
+                <li>Contacta con Nosotros</li>
+                <li>Términos y Condiciones</li>
+            <ul>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/headerSticky.js') }}"></script>
+
+
 </body>
 </html>
