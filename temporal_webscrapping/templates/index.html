@@ -1,53 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="author" content="Grupo ISI"/>
-    <meta name="viewport" content="width=device-width"/>   <!-- Para diseño adaptable -->
-    <!-- Para que Flask lea los estilos css desde la carpeta static-->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}" /> 
-    <!-- Estilos de letra -->
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
-    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-    <!-- informacion visible del head -->
-    <link rel="icon" type="imgage/ico" href="{{ url_for('static', filename='img/pancake.ico') }}"/>
-    <title>Recetas a la Carta</title>
-</head>
-
-<body>
-    <nav class="menu">
-        <div class="container">
-            <div id="nav-title">
-                <a class="navbar-index" href="#background-header">Recetas a la Carta</a>
-            </div>
-            <div id="nav-options">
-                <ul id="bs-options-navbar">
-                    <li><a href="#background-header">Home</a></li>
-                    <li><a href="#categorias">Categorias</a></li>
-                    <li><a href="#about">Sobre nosotros</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <header>
-        <div id="background-header">
-            <div class="overlay">
-                <div class="container">
-                    <div class="intro-text">
-                        <h1>Introduzca los ingredientes...</h1>
-                        <div id="search-box">
-                            <form action="{{url_for('procesar')}}" method="get" class="busqueda-ingrediente">
-                                <input type="text" id="busca-ingrediente" name="ingrediente" placeholder="Buscar..."/>
-                                <button type="submit" id="search-btn"> <i class="fas fa-search"></i> </button>    
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>   
-    </header>
+{% include 'head.html' %}
+{% include 'header.html' %}
     <main>
+
+
         <div id="principal-recetas">
             <div id="recetas">
                 <table class="container-recetas">
@@ -55,10 +10,14 @@
                     <tr class="columns">
                         {% for rec in recet %}
                         <td class="column">
-                            <img class="img-recetas" src="{{rec.urlImagen}}" alt="recipe_image"/>
+                        <form action="{{url_for('informacion_resultado')}}" method="POST">
+                            <img class="img-recetas"  src="{{rec.urlImagen}}" alt="recipe_image"/>
                             <div class="title-receta-overlay">
-                                <p>{{rec.titulo}}</p>
+                                <p class="titulo-image-overlay">{{rec.titulo}}</p>
+                                <input type="hidden"  name="id-image" value="{{rec.urlImagen}}"/>
+                                <input type="image" src="{{ url_for('static', filename='img/boton_mostrar_receta.png')}}" width="80" height="80" alt="boton"/>   
                             </div>
+                        </form>
                         </td>
                         {% endfor %}
                     </tr>                   
@@ -66,6 +25,8 @@
                 </table>
             </div>
         </div>
+
+
         <div id="categorias" class="informacion">
             <div id="categorias-header">
                 <div class="overlay">
@@ -75,9 +36,11 @@
                 </div>
             </div>
             <div id="categorias-info">
-
+                
             </div>
         </div>
+
+
         <div id="about" class="informacion">
             <div id="about-header">
                 <div class="overlay">
@@ -109,20 +72,5 @@
             </div>
         </div>
     </main>
-    <footer>
-        <div id="footer-info">
-            <ul id="footer-options">
-                <li>&copy;&nbsp;2021&nbsp;Recetas a la Carta</li>
-                <li>Universidad de Granada</li>
-                <li> Ing. de Sistemas de Información</li>
-                <li>Contacta con Nosotros</li>
-                <li>Términos y Condiciones</li>
-            <ul>
-        </div>
-    </footer>
 
-    <script src="{{ url_for('static', filename='js/headerSticky.js') }}"></script>
-
-
-</body>
-</html>
+{% include 'footer.html' %}

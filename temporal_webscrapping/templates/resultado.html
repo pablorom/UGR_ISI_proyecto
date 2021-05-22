@@ -1,0 +1,64 @@
+{% include 'head.html' %}
+{% include 'header.html' %}
+    <main id="resultado-receta">
+        <div id="receta-contenedor">
+            <div id="la-receta-info-ppal" class="card-view">
+            {% if informacion is defined %}
+                <div id="recet-info-txt>">
+                    <h2 id="la-receta-title">{{informacion.titulo}}</h2>
+                    <h3 id="la-receta-origen">FUENTE: {{informacion.paginaOriginal}}</h3>
+                </div>
+                <div id="recet-info-img">
+                    <img src={{informacion.urlImagen}} alt="foto receta"/>
+                </div>
+            {% endif %}            
+            </div>
+            <div id="la-receta-info-aux" class="card-view">
+                <table class="tabla-info-aux">
+                    <tr>
+                        <td>
+                            <img class="round-icon" src="{{ url_for('static', filename='img/icono_tiempo.png')}}" alt="icono"/>
+                        </td>
+                        <td>
+                            <p class="p-icon">Minutos:</p>
+                        </td>
+                        <td>
+                            <p class="p-icon">{{informacion.tiempo}}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img class="round-icon" src="{{ url_for('static', filename='img/icono_categoria.png')}}" alt="icono"/>
+                        </td>
+                        <td>
+                            <p class="p-icon">Categoría:</p>
+                        </td>
+                        <td>
+                            <p class="p-icon">{{informacion.categoria}}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img class="round-icon" src="{{ url_for('static', filename='img/icono_cantidad.png')}}" alt="icono"/>
+                        </td>
+                        <td>
+                            <p class="p-icon">Cantidad:</p>
+                        </td>
+                        <td>
+                            <p class="p-icon">{{informacion.comensales}}</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="container-ingredientes" class="card-view">
+            <h2 id="titulo-ingrediente">Ingredientes</h2>
+            <ul id="lista-ingredientes">
+                {% for ingr in informacion.ingredientes %}
+                    <li>{{ingr}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </main>
+
+{% include 'footer.html' %}
