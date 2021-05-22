@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="author" content="Grupo ISI"/>
+    <meta name="viewport" content="width=device-width"/>   <!-- Para diseño adaptable -->
+    <!-- Para que Flask lea los estilos css desde la carpeta static-->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}" /> 
+    <!-- Estilos de letra -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader&display=swap" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <!-- informacion visible del head -->
+    <link rel="icon" type="imgage/ico" href="{{ url_for('static', filename='img/pancake.ico') }}"/>
+    <title>Recetas a la Carta</title>
+</head>
