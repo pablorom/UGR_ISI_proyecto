@@ -5,26 +5,33 @@
 
         <div id="principal-recetas">
             <div id="recetas">
-                <table class="container-recetas">
-                    {% for recet in recetas|batch(4) %}
-                    <tr class="columns">
-                        {% for rec in recet %}
-                        <td class="column">
-                        <form action="{{url_for('informacion_resultado')}}" method="POST">
-                            <div class="img-recetas">
-                                <img src="{{rec.urlImagen}}" alt="recipe_image"/>
-                                <div class="title-receta-overlay">
-                                    <p class="titulo-image-overlay">{{rec.titulo}}</p>
-                                    <input type="hidden"  name="id-image" value="{{rec.urlImagen}}"/>
-                                    <input type="image" src="{{ url_for('static', filename='img/boton_mostrar_receta.png')}}" width="80" height="80" alt="boton"/>   
+                {% if recetas |length > 0 %}
+                    <table class="container-recetas">
+                        {% for recet in recetas|batch(4) %}
+                        <tr class="columns">
+                            {% for rec in recet %}
+                            <td class="column">
+                            <form action="{{url_for('informacion_resultado')}}" method="POST">
+                                <div class="img-recetas">
+                                    <img src="{{rec.urlImagen}}" alt="recipe_image"/>
+                                    <div class="title-receta-overlay">
+                                        <p class="titulo-image-overlay">{{rec.titulo}}</p>
+                                        <input type="hidden"  name="id-image" value="{{rec.urlImagen}}"/>
+                                        <input type="image" src="{{ url_for('static', filename='img/boton_mostrar_receta.png')}}" width="80" height="80" alt="boton"/>   
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
-                        </td>
+                            </form>
+                            </td>
+                            {% endfor %}
+                        </tr>                   
                         {% endfor %}
-                    </tr>                   
-                    {% endfor %}
-                </table>
+                    </table>
+                {% else %}
+                    <div class="receta-no-encontrada">
+                        <h3 class="orden"> ¡UPS! No hemos encontrado ninguna receta :( </h3>
+                        <img class="not-found" src="{{ url_for('static', filename='img/recipe_not_found.png')}}" alt="error 404"/>
+                    </div>
+                {% endif %}
             </div>
         </div>
 
@@ -73,6 +80,7 @@
                 </div>
             </div>
         </div>
+
     </main>
 
 {% include 'footer.html' %}
