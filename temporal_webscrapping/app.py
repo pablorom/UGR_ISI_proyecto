@@ -7,6 +7,7 @@
 
 from flask import Flask, render_template, request
 import Busqueda
+import random
 
 app = Flask(__name__)
 busq = Busqueda.Busqueda()
@@ -18,7 +19,9 @@ def index():
     ingrediente = ""  # muestra recetas por defecto al no indicarle ningún ingrediente
     busq.set_ingrediente(ingrediente)
     listaReceta = busq.buscar()
+    random.shuffle(listaReceta) # las muestra de manera aleatoria
     return render_template("index.html", recetas=listaReceta)
+
 
 # Procesa el fomulario (de tipo get, para poder ver los ingredientes en la url)
 @app.route("/procesar", methods=['GET'])

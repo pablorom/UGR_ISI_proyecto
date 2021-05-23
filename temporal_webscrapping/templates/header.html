@@ -2,11 +2,11 @@
     <nav class="menu">
         <div class="container">
             <div id="nav-title">
-                <a class="navbar-index" href="#background-header">Recetas a la Carta</a>
+                <a class="navbar-index" href="{{url_for('index')}}">Recetas a la Carta</a>
             </div>
             <div id="nav-options">
                 <ul id="bs-options-navbar">
-                    <li><a href="#background-header">Home</a></li>
+                    <li><a href="{{url_for('index')}}">Home</a></li>
                     <li><a href="#categorias">Categorias</a></li>
                     <li><a href="#about">Sobre nosotros</a></li>
                 </ul>
@@ -21,7 +21,7 @@
                         <h1>Introduzca los ingredientes...</h1>
                         <div id="search-box">
                             <form action="{{url_for('procesar')}}" method="get" class="busqueda-ingrediente">
-                                <input type="text" id="busca-ingrediente" name="ingrediente" placeholder="Buscar..."/>
+                                <input type="text" id="busca-ingrediente" name="ingrediente" placeholder="Buscar..." autocomplete="off"/>
                                 <button type="submit" id="search-btn"> <i class="fas fa-search"></i> </button>    
                             </form>
                         </div>
