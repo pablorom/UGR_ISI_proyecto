@@ -11,11 +11,13 @@
                         {% for rec in recet %}
                         <td class="column">
                         <form action="{{url_for('informacion_resultado')}}" method="POST">
-                            <img class="img-recetas"  src="{{rec.urlImagen}}" alt="recipe_image"/>
-                            <div class="title-receta-overlay">
-                                <p class="titulo-image-overlay">{{rec.titulo}}</p>
-                                <input type="hidden"  name="id-image" value="{{rec.urlImagen}}"/>
-                                <input type="image" src="{{ url_for('static', filename='img/boton_mostrar_receta.png')}}" width="80" height="80" alt="boton"/>   
+                            <div class="img-recetas">
+                                <img src="{{rec.urlImagen}}" alt="recipe_image"/>
+                                <div class="title-receta-overlay">
+                                    <p class="titulo-image-overlay">{{rec.titulo}}</p>
+                                    <input type="hidden"  name="id-image" value="{{rec.urlImagen}}"/>
+                                    <input type="image" src="{{ url_for('static', filename='img/boton_mostrar_receta.png')}}" width="80" height="80" alt="boton"/>   
+                                </div>
                             </div>
                         </form>
                         </td>

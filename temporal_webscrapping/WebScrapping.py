@@ -44,7 +44,7 @@ class WebScrapping:
             # Es necesario escribir "MisRecetas.MisRecetas" para llamar a la clase
             # MisRecetas que está dentro del módulo con el mismo nombre
             receta = MisRecetas.MisRecetas(titulo, imagen, "RECETAS GRATIS", infoLaReceta)
-            receta.set_categoria(soup.find('div', class_='etiqueta').text)
+            receta.set_categoria(elem.find('div', class_='etiqueta').text)
             self.listaReceta.append(receta)
 
 
@@ -55,8 +55,9 @@ class WebScrapping:
         # Este spam proporciona la 'dificultad' 'tiempo' y 'comensales', sin embargo
         # en la página solo se muestra el tiempo y los comensales, por lo que nos quedamos con
         # la segunda y tercera posicion del array
-        receta.set_tiempo(soup.find('span', class_='property duracion').text)
-        receta.set_comensales(soup.find('span', class_='property comensales').text)
+        if soup.find('div', class_='properties') is not None:
+            receta.set_tiempo(soup.find('span', class_='property duracion').text)
+            receta.set_comensales(soup.find('span', class_='property comensales').text)
 
         # Obtención de los ingredientes
         lista_ingredientes = soup.find_all('li', class_="ingrediente")
@@ -68,6 +69,18 @@ class WebScrapping:
                 lst = lst.text
                 lst = lst.replace("\n", "")
                 receta.add_ingrediente(lst)
+
+        # Obtenemos los pasos de la receta correspondiente
+        lista_preparacion = soup.find_all('div', class_='apartado')
+        receta.remove_preparacion()
+
+        if len(lista_preparacion) > 0:
+            for prep in lista_preparacion:
+                # Es necesario este if para recoger exclusivamente los pasos pertenecientes a la receta
+                # y omitir información no necesaria de la página
+                if prep.find('div', class_='orden') is not None:
+                    parrafo = prep.find('p').text   
+                    receta.add_preparacion(parrafo)             
 
         return receta
 
@@ -123,11 +136,28 @@ class WebScrapping:
 
         # Obtención de los ingredientes
         ingredientes_div = soup.find('div', {'id':'ingredients'})
+
+        # Se debe borrar la lista antes de rellenarla ya que si el usuario recarga la pagina de una receta
+        # el objeto sdigue existiendo y multiplica la información
+        receta.remove_ingredientes()
+
         if ingredientes_div is not None:
             lista_ingredientes = ingredientes_div.find('ul').find_all('li')
-            
+          
             for lst in lista_ingredientes:
                 receta.add_ingrediente(lst.text)
+        
+        # Obtenemos los pasos de la receta correspondiente
+        preparacion_div = soup.find('div', {'id':'description'})
+        receta.remove_preparacion()
+
+        if preparacion_div is not None:
+            lista_preparacion = preparacion_div.find_all('ol')
+            for prep in lista_preparacion:
+                lista_parrafos = prep.find_all('li')
+                for p in lista_parrafos:
+                    receta.add_preparacion(p.text)
+
 
         return receta
             
