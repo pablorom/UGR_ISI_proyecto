@@ -39,6 +39,6 @@ def informacion_resultado():
 
 # No borrar este metodo (por ahora) ... esto deberia cambiarse por el servidor cloud
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=5500, debug=True)
+    app.run(host='127.0.0.1', port=5000, debug=True)
 
 
