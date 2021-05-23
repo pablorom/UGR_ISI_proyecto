@@ -15,7 +15,7 @@ class WebScrapping:
     # Constructor de la clase Receta
     def __init__(self, ingred):
         self.ingrediente = ingred
-        self.listaReceta = []
+
         # Si el usuario introduce los ingredientes separados con comas, las eliminamos
         self.ingrediente = self.ingrediente.replace(",","")
 
@@ -29,6 +29,8 @@ class WebScrapping:
         html_text = requests.get(url_completa).text
         soup = BeautifulSoup(html_text, 'lxml')
         elementos = soup.find_all('div', class_ = 'resultado link')
+
+        lista_elem = []
         
         for elem in elementos:
             # Obtenemos los parámetros deseados
@@ -45,7 +47,9 @@ class WebScrapping:
             # MisRecetas que está dentro del módulo con el mismo nombre
             receta = MisRecetas.MisRecetas(titulo, imagen, "RECETAS GRATIS", infoLaReceta)
             receta.set_categoria(elem.find('div', class_='etiqueta').text)
-            self.listaReceta.append(receta)
+            lista_elem.append(receta)
+        
+        return lista_elem
 
 
     def informacion_receta_recetasgratis(self,receta):
@@ -93,6 +97,8 @@ class WebScrapping:
         soup = BeautifulSoup(html_text, 'lxml')
         elementos = soup.find_all('div', class_='pure-u-1-2 pure-u-lg-1-5')
 
+        lista_elem = []
+
         for elem in elementos:
             # Obtenemos los parámetros deseados
             # Como el tag <a href...> donde se aloja el titulo no tiene ningún atributo 'class'
@@ -111,9 +117,9 @@ class WebScrapping:
             # Es necesario escribir "MisRecetas.MisRecetas" para llamar a la clase
             # MisRecetas que está dentro del módulo con el mismo nombre
             receta = MisRecetas.MisRecetas(titulo, imagen, "RECETAS DE RECHUPETE", infoLaReceta)
-            self.listaReceta.append(receta)
+            lista_elem.append(receta)
 
-        return self.listaReceta
+        return lista_elem
   
             
     def informacion_receta_rechupete(self,receta):

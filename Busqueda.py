@@ -6,6 +6,8 @@
 """
 
 import WebScrapping
+import Cache
+
 
 class Busqueda:
 
@@ -13,6 +15,7 @@ class Busqueda:
     def __init__(self):
         self.ingrediente = ""
         self.listaReceta = []
+        self.cache = Cache.Cache()
 
     def get_ingrediente(self):
         return self.ingrediente
@@ -24,10 +27,33 @@ class Busqueda:
     
     # Se llama a los metodos que realizan WebScrapping sobre Recetas Gratis y No Solo Dulces
     def busqueda_scrapping(self):
-        ws = WebScrapping.WebScrapping(self.ingrediente)  # Se realiza el web scrapping del ingrediente
-        ws.buscar_recetasGratis()
-        # self.listaReceta contiene los ingredientes de ambas paginas
-        self.listaReceta = ws.buscar_rechupete()
+        if self.cache.esta_en_cache(self.ingrediente):
+            self.listaReceta = self.cache.get_recetas(self.ingrediente)
+
+        else:
+            ws = WebScrapping.WebScrapping(self.ingrediente)  # Se realiza el web scrapping del ingrediente
+            lista_recetasgratis = ws.buscar_recetasGratis()
+            # self.listaReceta contiene los ingredientes de ambas paginas
+            lista_rechupete = ws.buscar_rechupete()
+
+            self.listaReceta = []
+
+            if len(lista_recetasgratis) < len(lista_rechupete):
+                for i in range(len(lista_recetasgratis)):
+                    self.listaReceta.append(lista_recetasgratis[i])
+                    self.listaReceta.append(lista_rechupete[i])
+
+                for i in range(len(lista_recetasgratis), len(lista_rechupete)):
+                    self.listaReceta.append(lista_rechupete[i]) 
+            else:
+                for i in range(len(lista_rechupete)):
+                    self.listaReceta.append(lista_recetasgratis[i])
+                    self.listaReceta.append(lista_rechupete[i])
+
+                for i in range(len(lista_rechupete), len(lista_recetasgratis)):
+                    self.listaReceta.append(lista_recetasgratis[i])
+
+            self.cache.nueva_busqueda(self.ingrediente, self.listaReceta)
 
         return self.listaReceta
 
