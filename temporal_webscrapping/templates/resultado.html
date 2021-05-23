@@ -52,12 +52,28 @@
             </div>
         </div>
         <div id="container-ingredientes" class="card-view">
-            <h2 id="titulo-ingrediente">Ingredientes</h2>
-            <ul id="lista-ingredientes">
-                {% for ingr in informacion.ingredientes %}
-                    <li>{{ingr}}</li>
+            {% if informacion.ingredientes |length > 1%}
+                <h2 id="titulo-ingrediente">Ingredientes</h2>
+                <ul id="lista-ingredientes">
+                    {% for ingr in informacion.ingredientes %}
+                        <li>{{ingr}}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <img class="not-found" src="{{ url_for('static', filename='img/ingredients_not_found.PNG')}}" alt="error 404"/>
+            {% endif %}
+        </div>
+
+        <div class="preparacion-contenedor">
+            {% if informacion.ingredientes |length > 0%}
+                {% for prep in informacion.preparacion%}
+                    <h3 class="orden">Paso {{loop.index}}</h3>
+                    <p class="paso">{{prep}}</p>
                 {% endfor %}
-            </ul>
+            {% else %}
+                <img class="not-found" src="{{ url_for('static', filename='img/recipe_not_found.png')}}" alt="error 404"/>
+                <h3 class="orden not-found"> La información de esta receta no está disponible</h3>
+            {% endif %}
         </div>
     </main>
 

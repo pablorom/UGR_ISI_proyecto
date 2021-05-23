@@ -22,6 +22,7 @@ class MisRecetas(object):
         self.comensales = "No disponible"
         self.categoria = "No disponible"
         self.ingredientes = []
+        self.preparacion = []
         
         
     # Definimos los get y set de las variables   
@@ -76,4 +77,11 @@ class MisRecetas(object):
     def remove_ingredientes(self):
         self.ingredientes.clear()
 
-    
+    def get_preparacion(self):
+        return self.preparacion
+
+    def add_preparacion(self, prep):
+        self.preparacion.append(prep)
+
+    def remove_preparacion(self):
+        self.preparacion.clear()
