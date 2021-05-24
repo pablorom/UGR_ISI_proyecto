@@ -168,23 +168,43 @@ class WebScrapping:
 
         return receta
 
-
     # Peticion a la API edamam
+
     def api_edamam(self):
         app_id = '583703c0'
         app_key = '1c2dbf65b7d182baa76c867f0a0bea10'
         url = 'https://api.edamam.com'
-        url_completa = 'https://api.edamam.com/search?q='+self.ingrediente+'&app_id='+app_id+'&app_key='+app_key+'&from=0&to=3'
+        url_completa = 'https://api.edamam.com/search?q='+self.ingrediente + \
+            '&app_id='+app_id+'&app_key='+app_key+'&from=0&to=3'
         response = requests.get(url_completa)
         json_data = response.json()
         recipes = json_data['hits']
-        #We iterate through all recipes
-        for rec in recipes:
-            print(rec['recipe']['image'])
-  
-            
-    def informacion_receta_edamam(self,receta):
+
+        lista_elem = []
+        # Iteramos por todas las recetas
+        for recipe in recipes:
+            recipe = recipe['recipe']
+            titulo = recipe['label']
+            imagen = recipe['image']
+            infoLaReceta = recipe['shareAs']
+            receta = MisRecetas.MisRecetas(
+                titulo, imagen, "EDAMAM API", infoLaReceta)
+            # La API ya nos devuelve toda la info en el JSON
+            # Llamamos a los setters para dar valores a cada instancia de MiReceta
+            receta = MisRecetas.MisRecetas(
+                titulo, imagen, "EDAMAM API", ' ')
+            receta.set_tiempo(int(recipe['totalTime']))
+            receta.set_comensales(recipe['yield'])
+            receta.set_urlReceta(recipe['url'])
+            receta.set_source(recipe['source'])
+            for ingredient in recipe['ingredients']:
+                receta.add_ingrediente(ingredient["text"])
+
+            lista_elem.append(receta)
+        
+
+        return lista_elem
+
+    def informacion_receta_api(self, receta):
         return receta
-            
-            
     

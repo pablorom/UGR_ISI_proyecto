@@ -23,6 +23,8 @@ class MisRecetas(object):
         self.categoria = "No disponible"
         self.ingredientes = []
         self.preparacion = []
+        #Solo para recetas de API
+        self.source = "No disponible"
         
         
     # Definimos los get y set de las variables   
@@ -85,3 +87,9 @@ class MisRecetas(object):
 
     def remove_preparacion(self):
         self.preparacion.clear()
+
+    def get_source(self):
+        return self.source
+
+    def set_source(self, src):
+        self.source = src

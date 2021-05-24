@@ -42,6 +42,7 @@ class Busqueda:
                 for i in range(len(lista_recetasgratis)):
                     self.listaReceta.append(lista_recetasgratis[i])
                     self.listaReceta.append(lista_rechupete[i])
+                    
 
                 for i in range(len(lista_recetasgratis), len(lista_rechupete)):
                     self.listaReceta.append(lista_rechupete[i]) 
@@ -58,11 +59,32 @@ class Busqueda:
         return self.listaReceta
 
     # Aqui falta el método que realiza la búsqueda con la API 
+    # Se llama a los metodos que hace petición a la API
+    def busqueda_api(self):
+        # Si el ingrediente es vacio la API no devolverá nada
+        if(self.ingrediente != ''):
+            if self.cache.esta_en_cache(self.ingrediente):
+                self.listaReceta = self.cache.get_recetas(self.ingrediente)
+            else:
+                ws = WebScrapping.WebScrapping(self.ingrediente)
+                lista_recetasEdamam = ws.api_edamam()
+                self.listaReceta.extend(lista_recetasEdamam)
+                print("RECETAS DE API:")
+                print(len(lista_recetasEdamam))
+                # Actualizamos la caché
+                self.cache.nueva_busqueda(self.ingrediente, self.listaReceta)
+
+
+        return self.listaReceta
 
     def buscar(self):
         self.listaReceta = self.busqueda_scrapping()
+        print("RECETAS DE WEB SCRAPING:")
+        print(len(self.busqueda_scrapping()))
         # Aqui se llamaria al método que hace una busqueda con la API
-
+        self.listaReceta = self.busqueda_api()
+        print("APPEND DE LISTAS:")
+        print(len(self.listaReceta))
         return self.listaReceta
 
     # Método que muestra los resultados (para comprobar que funciona bien)
@@ -75,5 +97,8 @@ class Busqueda:
             info_completa_receta = ws.informacion_receta_rechupete(info_basica_receta)
         elif info_basica_receta.get_paginaOriginal() == "RECETAS GRATIS":
             info_completa_receta = ws.informacion_receta_recetasgratis(info_basica_receta)
+        elif info_basica_receta.get_paginaOriginal() == "EDAMAM API":
+            info_completa_receta = ws.informacion_receta_api(
+                info_basica_receta)
 
         return info_completa_receta

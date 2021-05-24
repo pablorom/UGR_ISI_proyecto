@@ -34,8 +34,9 @@ def procesar():
 @app.route("/resultado", methods=['POST'])
 def informacion_resultado(): 
     resultado = request.form.get("id-image") # Usamos request.form.get porque el valor a recoger vienen de un formulario
+    print("RESULTADO: " + resultado)
     info_receta = busq.buscar_receta(resultado)
-    return render_template("resultado.html", informacion=info_receta) # Se carega un html nuevo (mostrar.html) tras la peticion
+    return render_template("resultado.html", informacion=info_receta) # Se carga un html nuevo (mostrar.html) tras la peticion
 
 # No borrar este metodo (por ahora) ... esto deberia cambiarse por el servidor cloud
 if __name__ == "__main__":
