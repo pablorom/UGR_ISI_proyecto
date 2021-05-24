@@ -28,6 +28,8 @@ class Busqueda:
         ws.buscar_recetasGratis()
         # self.listaReceta contiene los ingredientes de ambas paginas
         self.listaReceta = ws.buscar_rechupete()
+        print("API EDAMAM")
+        ws.api_edamam()
 
         return self.listaReceta
 
@@ -35,7 +37,7 @@ class Busqueda:
 
     def buscar(self):
         self.listaReceta = self.busqueda_scrapping()
-        # Aqui se llamaria al método que hace una busqueda conn la API
+        # Aqui se llamaria al método que hace una busqueda con la API
 
         return self.listaReceta
 

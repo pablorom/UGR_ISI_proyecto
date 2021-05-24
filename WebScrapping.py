@@ -6,6 +6,7 @@
 """
 
 from bs4 import BeautifulSoup
+import json
 import requests
 import MisRecetas
 
@@ -159,6 +160,24 @@ class WebScrapping:
                     receta.add_preparacion(p.text)
 
 
+        return receta
+
+
+    # Peticion a la API edamam
+    def api_edamam(self):
+        app_id = '583703c0'
+        app_key = '1c2dbf65b7d182baa76c867f0a0bea10'
+        url = 'https://api.edamam.com'
+        url_completa = 'https://api.edamam.com/search?q='+self.ingrediente+'&app_id='+app_id+'&app_key='+app_key+'&from=0&to=3'
+        response = requests.get(url_completa)
+        json_data = response.json()
+        recipes = json_data['hits']
+        #We iterate through all recipes
+        for rec in recipes:
+            print(rec['recipe']['image'])
+  
+            
+    def informacion_receta_edamam(self,receta):
         return receta
             
             

@@ -29,7 +29,7 @@ def procesar():
     ingrediente = request.args.get("ingrediente")  # request del parametro ingrediente de la URL
     busq.set_ingrediente(ingrediente)
     listaReceta = busq.buscar()
-    return render_template("index.html", recetas=listaReceta) # Se carega un html nuevo (mostrar.html) tras la peticion
+    return render_template("index.html", recetas=listaReceta) # Se carga un html nuevo (mostrar.html) tras la peticion
 
 @app.route("/resultado", methods=['POST'])
 def informacion_resultado(): 
