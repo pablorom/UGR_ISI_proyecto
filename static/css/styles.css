@@ -201,33 +201,20 @@ header {
 }
 
 #recetas{
-    height: 100%;
-    background-color: white;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-template-rows: auto auto auto;
     width: 80%;
+    height: 100%;
+    row-gap: 20px;
+    padding: 10px;
+    background-color: white;
     overflow-x: hidden;
     overflow-y: auto;
 }
 
 #recetas::-webkit-scrollbar{
     display: none;
-}
-
-.container-recetas{
-    width: 100%;
-}
-
-.container-recetas tr {
-    width: 100%;   
-}
-
-.container-recetas tr td{
-    width: 20%;
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    padding-bottom: 20px;
-    text-align: center;
-    position: relative;
 }
 
 .img-recetas{
@@ -237,36 +224,41 @@ header {
     12px 12px 16px 0 rgba(0, 0, 0, 0.25),
     -8px -8px 12px 0 rgba(255, 255, 255, 0.3);
     border-radius: 10px;
-    display: flex;
+    position: relative;
 }
 
 .img-recetas img{
     width: 100%;
     height: 100%;
     border-radius: 10px;
-    z-index: 0;
+    opacity: 1;
+    display: block;
+    transition: .5s ease;
 }
 
 .title-receta-overlay{
     position: absolute;
-    width: 320px;
-    height: 250px;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
     color: white;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    background: rgba(0, 0, 0, 0.4);
     opacity: 0;
     transition: opacity 0.25s;
     backdrop-filter: blur(5px);
+    transform: translate(-50%, -50%);
     border-radius: 10px;
-    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-.title-receta-overlay:hover{
+.img-recetas:hover > .title-receta-overlay{
     opacity: 1;
 }
+
 
 .title-receta-overlay:hover > p{
     transform: translateY(0);
@@ -281,6 +273,7 @@ header {
     padding-right: 5px;
     padding-left: 5px;
     cursor: default;
+    text-align: center;
 }
 
 .titulo-image-overlay{
@@ -664,6 +657,16 @@ footer{
 
 /* ----------------- DISEÑO ADAPTABLE */
 
+/* Resolucion horizontal entre 1200px y 1625px */
+@media (min-width: 1200px) and (max-width: 1625px){
+    /* ESTILOS DE LA LISTA DE RECETAS */
+
+    #recetas{
+        grid-template-columns: auto auto auto;
+    }
+
+}
+
 /* Resolución horizontal entre 900px y 1200px */
 
 @media (min-width: 900px) and (max-width: 1200px){
@@ -697,6 +700,11 @@ footer{
 
     .collapse{
         height: 20vh;
+    }
+
+    /* ESTILOS DE LA LISTA DE RECETAS */
+    #recetas{
+        grid-template-columns: auto auto;
     }
 
     /* ESTILOS DEL ABOUT US */
@@ -738,7 +746,6 @@ footer{
     #container-ingredientes{
         width: 100%;
     }
-
 
 }
 
@@ -783,6 +790,18 @@ footer{
         height: 25vh;
     }
 
+    /* ESTILOS DE LA LISTA DE RECETAS */
+    #recetas{
+        grid-template-columns: auto;
+        grid-auto-flow: column;
+        overflow-y: hidden;
+        overflow-x: scroll;
+        column-gap: 20px;
+    }
+
+    #recetas::-webkit-scrollbar{
+        display: block;
+    }
 
     /* ESTILO DEL ABOUT-US */
 
