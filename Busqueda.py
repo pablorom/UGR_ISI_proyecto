@@ -24,6 +24,20 @@ class Busqueda:
         self.ingrediente = ingr
         # Si el usuario introduce los ingredientes separados con comas, las eliminamos
         self.ingrediente = self.ingrediente.replace(",","")
+
+    
+    # Aqui falta el método que realiza la búsqueda con la API 
+    # Se llama a los metodos que hace petición a la API
+    def busqueda_api(self):
+        # Si el ingrediente es vacio la API no devolverá nada
+        if(self.ingrediente != ''):
+                ws = WebScrapping.WebScrapping(self.ingrediente)
+                lista_recetasEdamam = ws.api_edamam()
+                return lista_recetasEdamam
+        else:
+            return []
+
+        
     
     # Se llama a los metodos que realizan WebScrapping sobre Recetas Gratis y No Solo Dulces
     def busqueda_scrapping(self):
@@ -35,6 +49,7 @@ class Busqueda:
             lista_recetasgratis = ws.buscar_recetasGratis()
             # self.listaReceta contiene los ingredientes de ambas paginas
             lista_rechupete = ws.buscar_rechupete()
+            lista_api = self.busqueda_api()
 
             self.listaReceta = []
 
@@ -54,29 +69,18 @@ class Busqueda:
                 for i in range(len(lista_rechupete), len(lista_recetasgratis)):
                     self.listaReceta.append(lista_recetasgratis[i])
 
+
+            for receta in lista_api:
+                self.listaReceta.append(receta)
+
             self.cache.nueva_busqueda(self.ingrediente, self.listaReceta)
 
         return self.listaReceta
 
-    # Aqui falta el método que realiza la búsqueda con la API 
-    # Se llama a los metodos que hace petición a la API
-    def busqueda_api(self):
-        # Si el ingrediente es vacio la API no devolverá nada
-        if(self.ingrediente != ''):
-            if self.cache.esta_en_cache(self.ingrediente):
-                self.listaReceta = self.cache.get_recetas(self.ingrediente)
-            else:
-                ws = WebScrapping.WebScrapping(self.ingrediente)
-                lista_recetasEdamam = ws.api_edamam()
-                self.listaReceta.extend(lista_recetasEdamam)
-                # Actualizamos la caché
-                self.cache.nueva_busqueda(self.ingrediente, self.listaReceta)
-
-        return self.listaReceta
+    
 
     def buscar(self):
         self.listaReceta = self.busqueda_scrapping()
-        self.listaReceta = self.busqueda_api()
 
         return self.listaReceta
 
@@ -107,9 +111,63 @@ class Busqueda:
         # la lista de recetas que aparece debera de cambiar y solamente aparecerán
         # las recetas que tienen el atributo tiempo a "No disponible" :)
         # Cuando se haga la filtracion por tiempo esto ya no debera estar aquí jeje
-        for l in recetas:
-            if l.get_tiempo() == "No disponible":
-                recetas_filtradas.append(l)
+        for receta in recetas:
+            tiempo = receta.get_tiempo()
+            minutos_totales = -1
+
+            if tiempo != "No disponible":
+
+                if receta.get_paginaOriginal() == "RECETAS GRATIS":
+
+
+                    if " " in tiempo:
+                        horas,minutos = tiempo.split(" ")
+
+                        indice = horas.find("h")
+                        horas = horas[0:indice]
+
+                        minutos_totales = int(horas) * 60
+
+                        indice = minutos.find("m")
+                        minutos = minutos[0:indice]
+
+                        minutos_totales = minutos_totales + int(minutos)
+
+                    elif "h" in tiempo:
+                        horas = tiempo
+                        
+                        indice = horas.find("h")
+                        horas = horas[0:indice]
+
+                        minutos_totales = int(horas) * 60
+                        
+                
+                    elif "m" in tiempo:
+                        minutos = tiempo
+
+                        indice = minutos.find("m")
+                        minutos = minutos[0:indice]
+
+                        minutos_totales = int(minutos)
+
+                elif receta.get_paginaOriginal() == "EDAMAM API":
+
+                     minutos_totales = tiempo
+
+                
+                if tiempo_elegido == "poco":
+                    if minutos_totales > 0 and minutos_totales <= 30:
+                        recetas_filtradas.append(receta)
+                elif tiempo_elegido == "medio":
+                    if minutos_totales > 30 and minutos_totales <= 60:
+                        recetas_filtradas.append(receta)
+                elif tiempo_elegido == "mucho":
+                    if minutos_totales > 60:
+                        recetas_filtradas.append(receta)
+
+        return recetas_filtradas
+            
+
 
 
         # Para la filtracion... 
