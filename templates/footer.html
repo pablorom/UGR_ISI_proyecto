@@ -15,7 +15,12 @@
 
     <!-- JavaScript para el navbar collapse en el responsive view-->  
     <script src="{{ url_for('static', filename='js/collapseNav.js') }}"></script>
-    
+
+    <!-- 
+        Script en JavaScript que usa AJAX para realizar peticiones del servidor en segundo plano
+        y actualizar el contenido de la página dinámcamente sin necesidad de refrescarla.
+        Usamos esta utilidad para el funcionamiento del filtrado de las recetas por tiempo
+    --> 
     <script type="text/javascript">
         function tiempoEleccion(clicked_id){
             let id = clicked_id;
@@ -32,10 +37,6 @@
             },
             });
         }
-            //const xhr = new XMLHttpRequest();
-            //xhr.open('POST', URL);
-            //xhr.send(clicked_id);
-
     </script>
 
 </body>
