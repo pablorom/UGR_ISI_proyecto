@@ -71,7 +71,7 @@
                     <p class="paso">{{prep}}</p>
                 {% endfor %}
             {% elif informacion.urlReceta %}
-                Follow the instructions to make this recipe at <a href={{informacion.urlReceta}}> {{informacion.source}} </a>
+                <p class="paso">Follow the instructions to make this recipe at <a href={{informacion.urlReceta}}> {{informacion.source}} </a></p>
             {% else %}
                 <img class="not-found" src="{{ url_for('static', filename='img/recipe_not_found.png')}}" alt="error 404" />
                 <h3 class="orden not-found"> La información de esta receta no está disponible</h3>

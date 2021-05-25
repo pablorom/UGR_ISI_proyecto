@@ -15,6 +15,28 @@
 
     <!-- JavaScript para el navbar collapse en el responsive view-->  
     <script src="{{ url_for('static', filename='js/collapseNav.js') }}"></script>
+    
+    <script type="text/javascript">
+        function tiempoEleccion(clicked_id){
+            let id = clicked_id;
+            let resultado = document.getElementById("filtro");
+            $.ajax({
+            url:"/categorias",
+            type:"POST",
+            data: {"tiempo_clickado":id},
+            success: function(response){
+                resultado.innerHTML = response
+            },
+            error: function(error){
+                //console.log(error)
+            },
+            });
+        }
+            //const xhr = new XMLHttpRequest();
+            //xhr.open('POST', URL);
+            //xhr.send(clicked_id);
+
+    </script>
 
 </body>
 </html>

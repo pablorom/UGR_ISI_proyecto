@@ -4,7 +4,7 @@
 
 
         <div id="principal-recetas">
-            <div id="recetas">
+            <div class="recetas">
                 {% if recetas |length > 0 %}
                     {% for recet in recetas %}
                         <div class="columns">
@@ -30,21 +30,40 @@
         </div>
 
 
-        <div id="categorias" class="informacion">
-            <div id="categorias-header">
+        <div class="informacion">
+            <div id="tiempo-header">
                 <div class="overlay">
-                    <h2>Categorias</h2>
+                    <h2>¿Cuánto tiempo tienes?</h2>
                     <hr>
-                    <p>Aqui van las categorias</p>
+                    <div id="tiempo-opciones">
+                        <button class="btn-opciones" id="poco" onclick=" tiempoEleccion(this.id)">Hoy no tengo tiempo</button>       
+                        <button class="btn-opciones" id="medio" onclick=" tiempoEleccion(this.id)" >Podría esperar...</button>
+                        <button class="btn-opciones" id="mucho" onclick=" tiempoEleccion(this.id)" >Todo el día en la cocina</button>
+                    </div>
                 </div>
             </div>
-            <div id="categorias-info">
-                
+            <div id="tiempo-info">
+                <div id="filtro" class="recetas">
+                {% for recet in recetas %}
+                    <div class="columns">
+                        <form action="{{url_for('informacion_resultado')}}" method="POST">
+                            <div class="img-recetas">
+                                <img src="{{recet.urlImagen}}" alt="recipe_image"/>
+                                <div class="title-receta-overlay">
+                                    <p class="titulo-image-overlay">{{recet.titulo}}</p>
+                                    <input type="hidden"  name="id-image" value="{{recet.urlImagen}}"/>
+                                    <input type="image" src="{{ url_for('static', filename='img/boton_mostrar_receta.png')}}" width="80" height="80" alt="boton"/>   
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                {% endfor %}
+                </div>
             </div>
         </div>
 
 
-        <div id="about" class="informacion">
+        <div class="informacion">
             <div id="about-header">
                 <div class="overlay">
                     <h2>Sobre nosotros</h2>

@@ -8,6 +8,7 @@
 from bs4 import BeautifulSoup
 import json
 import requests
+from werkzeug.utils import html
 import MisRecetas
 
 class WebScrapping:
@@ -48,6 +49,10 @@ class WebScrapping:
             # MisRecetas que está dentro del módulo con el mismo nombre
             receta = MisRecetas.MisRecetas(titulo, imagen, "RECETAS GRATIS", infoLaReceta)
             receta.set_categoria(elem.find('div', class_='etiqueta').text)
+
+            if elem.find('span', class_="property duracion") is not None:
+                receta.set_tiempo(elem.find('span', class_='property duracion').text)
+            
             lista_elem.append(receta)
         
         return lista_elem
@@ -60,8 +65,7 @@ class WebScrapping:
         # Este spam proporciona la 'dificultad' 'tiempo' y 'comensales', sin embargo
         # en la página solo se muestra el tiempo y los comensales, por lo que nos quedamos con
         # la segunda y tercera posicion del array
-        if soup.find('div', class_='properties') is not None:
-            receta.set_tiempo(soup.find('span', class_='property duracion').text)
+        if soup.find('div', class_='properties') is not None:    
             receta.set_comensales(soup.find('span', class_='property comensales').text)
 
         # Obtención de los ingredientes
@@ -110,14 +114,23 @@ class WebScrapping:
 
             # Obtenemos la URL donde se encuentra la información detallada de la receta para poder
             # hacer el webscrapping de más información (ingredientes, tiempo....)
-            infoLaReceta = elem.find('a', href=True).get('href')          
-            
+            infoLaReceta = (elem.find('a', href=True).get('href'))
 
             # Aniadimos los parámetros obtenidos del webScrapping en una lista de
             # elementos de tipo MisRecetas.
             # Es necesario escribir "MisRecetas.MisRecetas" para llamar a la clase
             # MisRecetas que está dentro del módulo con el mismo nombre
             receta = MisRecetas.MisRecetas(titulo, imagen, "RECETAS DE RECHUPETE", infoLaReceta)
+            
+
+            # Necesitamos obtener el tiempo aqui para poder realizar el filtrado por tiempo    
+            html_text = requests.get(infoLaReceta).text
+            soup = BeautifulSoup(html_text, 'lxml')
+
+            info_aux = soup.find_all('span', class_='rdr-tag')
+            if len(info_aux) > 0:
+                receta.set_tiempo(info_aux[1].text)
+
             lista_elem.append(receta)
 
         return lista_elem
@@ -132,7 +145,6 @@ class WebScrapping:
         # la segunda y tercera posicion del array
         info_aux = soup.find_all('span', class_='rdr-tag')
         if len(info_aux) > 0:
-            receta.set_tiempo(info_aux[1].text)
             receta.set_comensales(info_aux[2].text)
 
         # Nos quedamos con la primera categoria indicada por la página
@@ -173,7 +185,6 @@ class WebScrapping:
     def api_edamam(self):
         app_id = '583703c0'
         app_key = '1c2dbf65b7d182baa76c867f0a0bea10'
-        url = 'https://api.edamam.com'
         url_completa = 'https://api.edamam.com/search?q='+self.ingrediente + \
             '&app_id='+app_id+'&app_key='+app_key+'&from=0&to=3'
         response = requests.get(url_completa)
@@ -187,24 +198,21 @@ class WebScrapping:
             titulo = recipe['label']
             imagen = recipe['image']
             infoLaReceta = recipe['shareAs']
-            receta = MisRecetas.MisRecetas(
-                titulo, imagen, "EDAMAM API", infoLaReceta)
+            receta = MisRecetas.MisRecetas(titulo, imagen, "EDAMAM API", infoLaReceta)
+
             # La API ya nos devuelve toda la info en el JSON
             # Llamamos a los setters para dar valores a cada instancia de MiReceta
-            receta = MisRecetas.MisRecetas(
-                titulo, imagen, "EDAMAM API", ' ')
+            receta = MisRecetas.MisRecetas(titulo, imagen, "EDAMAM API", ' ')
+
             receta.set_tiempo(int(recipe['totalTime']))
             receta.set_comensales(recipe['yield'])
             receta.set_urlReceta(recipe['url'])
             receta.set_source(recipe['source'])
+
             for ingredient in recipe['ingredients']:
                 receta.add_ingrediente(ingredient["text"])
 
             lista_elem.append(receta)
         
-
         return lista_elem
-
-    def informacion_receta_api(self, receta):
-        return receta
     
