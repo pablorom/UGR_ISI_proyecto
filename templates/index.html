@@ -2,7 +2,6 @@
 {% include 'header.html' %}
     <main>
 
-
         <div id="principal-recetas">
             <div class="recetas">
                 {% if recetas |length > 0 %}
@@ -13,7 +12,9 @@
                                     <img src="{{recet.urlImagen}}" alt="recipe_image"/>
                                     <div class="title-receta-overlay">
                                         <p class="titulo-image-overlay">{{recet.titulo}}</p>
-                                        <input type="hidden"  name="id-image" value="{{recet.urlImagen}}"/>
+                                        <input type="hidden"  name="id-url-receta" value="{{recet.urlReceta}}"/>
+                                        <input type="hidden"  name="id-pag-original" value="{{recet.paginaOriginal}}"/>
+                                        <input type="hidden"  name="id-ingrediente" value="{{ingred}}"/>
                                         <input type="image" src="{{ url_for('static', filename='img/boton_mostrar_receta.png')}}" width="80" height="80" alt="boton"/>   
                                     </div>
                                 </div>
@@ -30,7 +31,7 @@
         </div>
 
 
-        <div class="informacion">
+        <div id="categorias" class="informacion">
             <div id="tiempo-header">
                 <div class="overlay">
                     <h2>¿Cuánto tiempo tienes?</h2>
@@ -44,14 +45,15 @@
             </div>
             <div id="tiempo-info">
                 <div id="filtro" class="recetas">
-                {% for recet in recetas %}
+                {% for recet in recetasf %}
                     <div class="columns">
                         <form action="{{url_for('informacion_resultado')}}" method="POST">
                             <div class="img-recetas">
                                 <img src="{{recet.urlImagen}}" alt="recipe_image"/>
                                 <div class="title-receta-overlay">
                                     <p class="titulo-image-overlay">{{recet.titulo}}</p>
-                                    <input type="hidden"  name="id-image" value="{{recet.urlImagen}}"/>
+                                    <input type="hidden"  name="id-url-receta" value="{{recet.urlReceta}}"/>
+                                    <input type="hidden"  name="id-pag-original" value="{{recet.paginaOriginal}}"/>
                                     <input type="image" src="{{ url_for('static', filename='img/boton_mostrar_receta.png')}}" width="80" height="80" alt="boton"/>   
                                 </div>
                             </div>
@@ -63,7 +65,7 @@
         </div>
 
 
-        <div class="informacion">
+        <div id="about" class="informacion">
             <div id="about-header">
                 <div class="overlay">
                     <h2>Sobre nosotros</h2>

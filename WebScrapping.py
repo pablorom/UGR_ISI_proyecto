@@ -6,7 +6,6 @@
 """
 
 from bs4 import BeautifulSoup
-import json
 import requests
 from werkzeug.utils import html
 import MisRecetas
@@ -48,8 +47,7 @@ class WebScrapping:
             # Es necesario escribir "MisRecetas.MisRecetas" para llamar a la clase
             # MisRecetas que está dentro del módulo con el mismo nombre
             receta = MisRecetas.MisRecetas(titulo, imagen, "RECETAS GRATIS", infoLaReceta)
-            receta.set_categoria(elem.find('div', class_='etiqueta').text)
-
+            
             if elem.find('span', class_="property duracion") is not None:
                 receta.set_tiempo(elem.find('span', class_='property duracion').text)
             
@@ -58,15 +56,31 @@ class WebScrapping:
         return lista_elem
 
 
-    def informacion_receta_recetasgratis(self,receta):
-        html_text = requests.get(receta.get_urlReceta()).text
+    def informacion_receta_recetasgratis(self,url):
+        html_text = requests.get(url).text
         soup = BeautifulSoup(html_text, 'lxml')
 
-        # Este spam proporciona la 'dificultad' 'tiempo' y 'comensales', sin embargo
+        titulo = soup.find('h1', class_="titulo titulo--articulo").text
+        imagen = soup.find('div', class_="imagen lupa").find('img').get('src')
+
+        receta = MisRecetas.MisRecetas(titulo, imagen, "RECETAS GRATIS", url)
+
+        # Este span proporciona la 'dificultad' 'tiempo' y 'comensales', sin embargo
         # en la página solo se muestra el tiempo y los comensales, por lo que nos quedamos con
         # la segunda y tercera posicion del array
-        if soup.find('div', class_='properties') is not None:    
-            receta.set_comensales(soup.find('span', class_='property comensales').text)
+        busqueda_tiempo = soup.find('span', class_='property duracion')
+        busqueda_comensales = soup.find('span', class_='property comensales')
+        busqueda_categoria = soup.find('span', class_='property para')
+
+        if busqueda_tiempo is not None:
+            receta.set_tiempo(busqueda_tiempo.text)
+
+        if busqueda_comensales is not None:
+            receta.set_comensales(busqueda_comensales.text)
+        
+        if busqueda_categoria is not None:
+            receta.set_categoria(busqueda_categoria.text)
+
 
         # Obtención de los ingredientes
         lista_ingredientes = soup.find_all('li', class_="ingrediente")
@@ -122,29 +136,27 @@ class WebScrapping:
             # MisRecetas que está dentro del módulo con el mismo nombre
             receta = MisRecetas.MisRecetas(titulo, imagen, "RECETAS DE RECHUPETE", infoLaReceta)
             
-
-            # Necesitamos obtener el tiempo aqui para poder realizar el filtrado por tiempo    
-            html_text = requests.get(infoLaReceta).text
-            soup = BeautifulSoup(html_text, 'lxml')
-
-            info_aux = soup.find_all('span', class_='rdr-tag')
-            if len(info_aux) > 0:
-                receta.set_tiempo(info_aux[1].text)
-
             lista_elem.append(receta)
 
         return lista_elem
   
             
-    def informacion_receta_rechupete(self,receta):
-        html_text = requests.get(receta.get_urlReceta()).text
+    def informacion_receta_rechupete(self,url):
+        html_text = requests.get(url).text
         soup = BeautifulSoup(html_text, 'lxml')
+
+        titulo = soup.find('header').find('h1').text
+        imagen_list = soup.find_all('img', attrs={"loading": "lazy"})
+        imagen = imagen_list[1].get('src')
+
+        receta = MisRecetas.MisRecetas(titulo, imagen, "RECETAS DE RECHUPETE", url)
 
         # Este spam proporciona la 'dificultad' 'tiempo' y 'comensales', sin embargo
         # en la página solo se muestra el tiempo y los comensales, por lo que nos quedamos con
         # la segunda y tercera posicion del array
         info_aux = soup.find_all('span', class_='rdr-tag')
         if len(info_aux) > 0:
+            receta.set_tiempo(info_aux[1].text)
             receta.set_comensales(info_aux[2].text)
 
         # Nos quedamos con la primera categoria indicada por la página
@@ -179,40 +191,3 @@ class WebScrapping:
 
 
         return receta
-
-    # Peticion a la API edamam
-
-    def api_edamam(self):
-        app_id = '583703c0'
-        app_key = '1c2dbf65b7d182baa76c867f0a0bea10'
-        url_completa = 'https://api.edamam.com/search?q='+self.ingrediente + \
-            '&app_id='+app_id+'&app_key='+app_key+'&from=0&to=3'
-        response = requests.get(url_completa)
-        json_data = response.json()
-        recipes = json_data['hits']
-
-        lista_elem = []
-        # Iteramos por todas las recetas
-        for recipe in recipes:
-            recipe = recipe['recipe']
-            titulo = recipe['label']
-            imagen = recipe['image']
-            infoLaReceta = recipe['shareAs']
-            receta = MisRecetas.MisRecetas(titulo, imagen, "EDAMAM API", infoLaReceta)
-
-            # La API ya nos devuelve toda la info en el JSON
-            # Llamamos a los setters para dar valores a cada instancia de MiReceta
-            receta = MisRecetas.MisRecetas(titulo, imagen, "EDAMAM API", ' ')
-
-            receta.set_tiempo(int(recipe['totalTime']))
-            receta.set_comensales(recipe['yield'])
-            receta.set_urlReceta(recipe['url'])
-            receta.set_source(recipe['source'])
-
-            for ingredient in recipe['ingredients']:
-                receta.add_ingrediente(ingredient["text"])
-
-            lista_elem.append(receta)
-        
-        return lista_elem
-    

@@ -13,27 +13,40 @@ import random
 app = Flask(__name__)
 busq = Busqueda.Busqueda()
 listaReceta = []
+recetas_filtradas = []
+ingrediente = "" # muestra recetas por defecto al no indicarle ningún ingrediente
 
 # Se carga la pagina principal (index.html)
 @app.route("/")
 def index():
     global listaReceta
+    global ingrediente
 
-    ingrediente = ""  # muestra recetas por defecto al no indicarle ningún ingrediente
     busq.set_ingrediente(ingrediente)
     listaReceta = busq.buscar()
     random.shuffle(listaReceta) # las muestra de manera aleatoria
-    return render_template("index.html", recetas=listaReceta)
+
+    return render_template("index.html", recetas=listaReceta, recetasf=listaReceta, ingred=ingrediente)
 
 
 # Procesa el fomulario (de tipo get, para poder ver los ingredientes en la url)
 @app.route("/procesar", methods=['GET'])
 def procesar():
     global listaReceta
-    ingrediente = request.args.get("ingrediente")  # request del parametro ingrediente de la URL
-    busq.set_ingrediente(ingrediente)
-    listaReceta = busq.buscar()
-    return render_template("index.html", recetas=listaReceta) # Se carga un html nuevo (mostrar.html) tras la peticion
+    global recetas_filtradas
+    global ingrediente
+    
+    ingrediente_introducido = request.args.get("ingrediente")  # request del parametro ingrediente de la URL
+
+
+    # Solo se hara la búsqueda si el ingrediente introducido por el usuario es un ingrediente nuevo
+    if ingrediente_introducido != ingrediente:
+        ingrediente = ingrediente_introducido
+        busq.set_ingrediente(ingrediente)
+        listaReceta = busq.buscar()
+        recetas_filtradas = listaReceta
+
+    return render_template("index.html", recetas=listaReceta, recetasf =recetas_filtradas, ingred=ingrediente)
 
 
 # En footer.html se encuentra un script (JavaScript) que ejecuta AJAX para llamar a esta funcion
@@ -45,9 +58,10 @@ def procesar():
 @app.route("/categorias", methods=['POST'])
 def calcula_tiempo():
     global listaReceta
+    global recetas_filtradas
 
     json = request.form
-    tiempo_click = json['tiempo_clickado']
+    tiempo_click = json['tiempo_clickado'] 
   
     recetas_filtradas = busq.filtrar_por_tiempo(tiempo_click, listaReceta) # Funcion que categoriza las recetas por tiempo
         
@@ -62,12 +76,13 @@ def calcula_tiempo():
 # la URL obtenida ya no será la misma.
 @app.route("/resultado", methods=['POST'])
 def informacion_resultado(): 
-    resultado = request.form.get("id-image") # Usamos request.form.get porque el valor a recoger vienen de un formulario
-    info_receta = busq.buscar_receta(resultado)
+    resultado = request.form.get("id-url-receta") # Usamos request.form.get porque el valor a recoger vienen de un formulario
+    pagina = request.form.get("id-pag-original")
+    ingr_obtenido = request.form.get("id-ingrediente")
+    info_receta = busq.buscar_receta(resultado, pagina, ingr_obtenido)
     return render_template("resultado.html", informacion=info_receta) # Se carga un html nuevo (mostrar.html) tras la peticion
 
 
-# No borrar este metodo (por ahora) ... esto deberia cambiarse por el servidor cloud
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=5000, debug=True)
 

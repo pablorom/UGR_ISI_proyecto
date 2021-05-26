@@ -5,7 +5,8 @@
                 <img src="{{recet.urlImagen}}" alt="recipe_image"/>
                 <div class="title-receta-overlay">
                     <p class="titulo-image-overlay">{{recet.titulo}}</p>
-                    <input type="hidden"  name="id-image" value="{{recet.urlImagen}}"/>
+                    <input type="hidden"  name="id-url-receta" value="{{recet.urlReceta}}"/>
+                    <input type="hidden"  name="id-pag-original" value="{{recet.paginaOriginal}}"/>
                     <input type="image" src="{{ url_for('static', filename='img/boton_mostrar_receta.png')}}" width="80" height="80" alt="boton"/>   
                 </div>
             </div>
